@@ -14,12 +14,11 @@ PTH=-pthread
 RT=-rt
 
 # compiler and arguments
-CC=clang++ -Wall -std=c++14 $(INC) $(PTH)
+CC=clang++ -Wall -std=c++14 $(INC)
 
 # just add source file to this
 FILES=main.cpp \
-	  File.cpp \
-	  BlockingQueue.cpp
+	  File.cpp 
 
 # replace, *.cpp into ./src/*.cpp
 SRCS=$(FILES:%.cpp=$(SRC)/%.cpp)
@@ -32,11 +31,11 @@ TARGET=$(OUT)/main
 
 # biuld target
 $(TARGET):$(OBJS)
-	$(CC) -o $@ $^
+	$(CC) $(PTH) -o $@ $^
 
 # to all ./out/*.o:./src/*.cpp
 $(OUT)/%.o:$(SRC)/%.cpp
-	$(CC) -o $@ -c $^
+	$(CC) $(PTH) -o $@ -c $^
 
 # phony target
 clean:

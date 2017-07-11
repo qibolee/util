@@ -41,7 +41,7 @@ public:
     int read_line(char *buf, uint len);
     
     // write file from buf
-    int write(char *buf, uint len);
+    int write(const char *buf, uint len);
 
     // write file from format and argv
     int write_fmt(const char *format, ...);

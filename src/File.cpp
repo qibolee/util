@@ -84,7 +84,7 @@ int File::read_line(char *buf, uint len) {
     return tot_read;
 }
 
-int File::write(char *buf, uint len) {
+int File::write(const char *buf, uint len) {
 
     if (buf == nullptr) {
         throw std::invalid_argument("File::write(): invalid argument");
