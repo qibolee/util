@@ -7,21 +7,21 @@
 
 int inetConnect(const char *host, const char *service, int type) {
     struct addrinfo hints;
-    struct addrinfo *result, *rp;
+    struct addrinfo *result;
     int sfd;
 
     memset(&hints, 0, sizeof(struct addrinfo));
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = type;
-    hints.ai_canonname = NULL;
-    hints.ai_addr = NULL;
-    hints.ai_next = NULL;
+    hints.ai_canonname = nullptr;
+    hints.ai_addr = nullptr;
+    hints.ai_next = nullptr;
 
     if (getaddrinfo(host, service, &hints, &result) != 0) {
         errno = ENOSYS; 
         return -1;
     }
-    for (rp = result; rp != NULL; rp = rp->ai_next) {
+    for (auto rp = result; rp != nullptr; rp = rp->ai_next) {
         sfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
         if (sfd == -1) {
             continue;
@@ -33,7 +33,7 @@ int inetConnect(const char *host, const char *service, int type) {
     }
     freeaddrinfo(result);
     
-    return rp == NULL ? -1 : sfd;
+    return rp == nullptr ? -1 : sfd;
 }
 
 static int inetPassiveSocket(const char *service, int type, socklen_t *addrlen, bool doListen, int backlog) {
@@ -44,18 +44,18 @@ static int inetPassiveSocket(const char *service, int type, socklen_t *addrlen, 
     memset(&hints, 0, sizeof(struct addrinfo));
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = type;
-    hints.ai_addr = NULL;
-    hints.ai_next = NULL;
-    hints.ai_canonname = NULL;
+    hints.ai_addr = nullptr;
+    hints.ai_next = nullptr;
+    hints.ai_canonname = nullptr;
     hints.ai_flags = AI_PASSIVE;
 
-    if (getaddrinfo(NULL, service, &hints, &result) != 0) {
+    if (getaddrinfo(nullptr, service, &hints, &result) != 0) {
         errno = ENOSYS;
         return -1;
     }
 
     optval = 1;
-    for (rp = result; rp != NULL; rp = rp->ai_next) {
+    for (rp = result; rp != nullptr; rp = rp->ai_next) {
         sfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
         if (sfd == -1) {
             continue;
@@ -72,18 +72,18 @@ static int inetPassiveSocket(const char *service, int type, socklen_t *addrlen, 
         }
         close(sfd);
     }
-    if (rp != NULL && doListen) {
+    if (rp != nullptr && doListen) {
         if (listen(sfd, backlog) == -1) {
             freeaddrinfo(result);
             return -1;
         }
     }
-    if (rp != NULL && addrlen != NULL) {
+    if (rp != nullptr && addrlen != nullptr) {
         *addrlen = rp->ai_addrlen;
     }
     freeaddrinfo(result);
 
-    return rp == NULL ? -1 : sfd;
+    return rp == nullptr ? -1 : sfd;
 }
 
 int inetListen(const char *service, int backlog, socklen_t *addrlen) {
